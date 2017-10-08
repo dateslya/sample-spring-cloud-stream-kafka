@@ -2,6 +2,7 @@ package ru.sample.spring.cloud.stream.kafka;
 
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,13 +28,19 @@ public class SampleSpringCloudStreamKafkaApplicationTests {
 
     @Test
     public void contextLoads() throws InterruptedException {
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 5; i++) {
             try {
-                Thread.sleep(5 * 1000);
+                Thread.sleep(1 * 1000);
                 restTemplate.getForObject("http://localhost:8080/send?message=Hello-" + i, String.class);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    @Ignore
+    @Test
+    public void contextLoads2() throws InterruptedException {
+        Thread.sleep(5 * 60 * 1000);
     }
 }
