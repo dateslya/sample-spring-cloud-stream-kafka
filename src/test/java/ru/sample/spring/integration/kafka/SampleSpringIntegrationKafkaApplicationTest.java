@@ -1,6 +1,5 @@
-package ru.sample.spring.cloud.stream.kafka;
+package ru.sample.spring.integration.kafka;
 
-import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,28 +13,23 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.concurrent.TimeUnit;
 
 @ActiveProfiles({
-        "cloud-stream-kafka",
+        "kafka",
         "embedded-kafka"
 })
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class SampleSpringCloudStreamKafkaApplicationTests {
+public class SampleSpringIntegrationKafkaApplicationTest {
 
     @ClassRule
-    public static KafkaEmbedded embeddedKafka = new KafkaEmbedded(1);
+    public static KafkaEmbedded embeddedKafka = new KafkaEmbedded(1, false, "topic-1");
 
     private static TestRestTemplate restTemplate = new TestRestTemplate();
 
     @Value("${server.port}")
     private int port;
 
-    @BeforeClass
-    public static void setUp() {
-        System.setProperty("spring.embedded.kafka.zkNodes", embeddedKafka.getZookeeperConnectionString());
-    }
-
     @Test
-    public void send() throws InterruptedException {
+    public void send() throws Exception {
         for (int i = 0; i < 1; i++) {
             try {
                 TimeUnit.SECONDS.sleep(3);

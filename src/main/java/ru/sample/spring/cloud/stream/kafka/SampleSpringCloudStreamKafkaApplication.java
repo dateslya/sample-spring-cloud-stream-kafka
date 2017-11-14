@@ -1,7 +1,6 @@
 package ru.sample.spring.cloud.stream.kafka;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -14,14 +13,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.UnsupportedEncodingException;
-
+@Slf4j
 @RestController
 @EnableBinding({Sink.class, Source.class})
 @SpringBootApplication
 public class SampleSpringCloudStreamKafkaApplication {
-
-    private static final Logger LOG = LoggerFactory.getLogger(SampleSpringCloudStreamKafkaApplication.class);
 
     @Autowired
     private Source forward;
@@ -31,13 +27,13 @@ public class SampleSpringCloudStreamKafkaApplication {
     }
 
     @GetMapping("/send")
-    public void send(@RequestParam String message) throws UnsupportedEncodingException {
-        LOG.info("Forward message: {}", message);
+    public void send(@RequestParam String message) {
+        log.info("Forward message '{}'", message);
         forward.output().send(MessageBuilder.withPayload(message).build());
     }
 
     @StreamListener(Sink.INPUT)
     public void handle(String message) {
-        LOG.info("Handle message: {}", message);
+        log.info("Handle message '{}'", message);
     }
 }
